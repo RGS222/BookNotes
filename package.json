@@ -1,0 +1,27 @@
+{
+  "name": "captstone---book-notes-project",
+  "version": "1.0.0",
+  "description": "A website allows users put in some notes on the books they read",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RGS222/BookNotes.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/RGS222/BookNotes/issues"
+  },
+  "homepage": "https://github.com/RGS222/BookNotes#readme",
+  "dependencies": {
+    "axios": "^1.16.0",
+    "ejs": "^5.0.2",
+    "express": "^5.2.1",
+    "pg": "^8.20.0"
+  }
+}
