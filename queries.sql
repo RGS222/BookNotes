@@ -22,7 +22,7 @@ CREATE TABLE reviews (
 -- GET user password --
 CREATE OR REPLACE PROCEDURE getUserPassword(
     name VARCHAR,
-    OUT pass VARCHAR
+    INOUT pass VARCHAR DEFAULT NULL
 )
 LANGUAGE plpgsql
 AS $$
@@ -46,6 +46,7 @@ RETURNS SETOF reviews
 LANGUAGE plpgsql
 AS $$
 BEGIN
+    RETURN QUERY
     SELECT r.* FROM reviews r 
     INNER JOIN users u ON u.id = r.userId
     WHERE user IS NULL OR u.username = name;
@@ -56,7 +57,7 @@ $$;
 CREATE OR REPLACE PROCEDURE addUser(
     name VARCHAR,
     pass VARCHAR,
-    OUT id INT
+    INOUT returnId INT DEFAULT NULL
 )
 LANGUAGE plpgsql
 AS $$
@@ -65,9 +66,9 @@ BEGIN
         RAISE EXCEPTION 'Both parameter name and pass cannot be NULL';
     END IF;
 	
-    INSERT INTO users (name)
+    INSERT INTO users (username, password)
     VALUES (name, pass)
-    RETURNING id into id;
+    RETURNING id into returnId;
 END;
 $$;
 
@@ -87,6 +88,21 @@ BEGIN
 END;
 $$;
 
+-- DELETE user password --
+CREATE OR REPLACE PROCEDURE deleteUser(
+    name VARCHAR
+)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+	IF name IS NULL THEN
+        RAISE EXCEPTION 'Parameter name cannot be NULL';
+    END IF;
+    
+    DELETE FROM users WHERE username = name;
+END;
+$$;
+
 -- ADD user review
 CREATE OR REPLACE PROCEDURE addReview(
     userId INT,
@@ -95,37 +111,37 @@ CREATE OR REPLACE PROCEDURE addReview(
     notes TEXT,
     rating INT,
     lastUpdateDate DATE,
-    OUT id INT
+    INOUT returnId INT DEFAULT NULL
 )
 LANGUAGE plpgsql
 AS $$
 BEGIN
-	IF userId IS NULL OR newPassword IS NULL THEN
+	IF userId IS NULL OR title IS NULL THEN
         RAISE EXCEPTION 'Both parameter userId and title cannot be NULL';
     END IF;
     
     INSERT INTO reviews (userId, title, author, notes, rating, lastUpdateDate)
     VALUES (userId, title, author, notes, rating, lastUpdateDate)
-    RETURNING id into id;
+    RETURNING id into returnId;
 END;
 $$;
 
 -- UPDATE user review
 CREATE OR REPLACE PROCEDURE updateReview(
-    reviewId INT,
-    notes TEXT,
-    rating INT,
-    lastUpdateDate DATE
+    _reviewId INT,
+    _notes TEXT,
+    _rating INT,
+    _lastUpdateDate DATE
 )
 LANGUAGE plpgsql
 AS $$
 BEGIN
-	IF reviewId IS NULL THEN
-        RAISE EXCEPTION 'Parameter reviewId cannot be NULL';
+	IF _reviewId IS NULL THEN
+        RAISE EXCEPTION 'Parameter _reviewId cannot be NULL';
     END IF;
     
-    UPDATE reviews SET notes = notes, rating = rating, lastUpdateDate = lastUpdateDate
-    WHERE id = reviewId;
+    UPDATE reviews SET notes = _notes, rating = _rating, lastUpdateDate = _lastUpdateDate
+    WHERE id = _reviewId;
 END;
 $$;
 
