@@ -1,0 +1,37 @@
+<%- include("partials/header.ejs") %>
+
+<section id="users">
+    <form class="form" autocomplete="off" method="POST"
+        action="/<%= locals.actionType ? actionType.toLowerCase() : 'submit' %>">
+
+        <div class="form-elements">
+            <input id="id" name="id" hidden="true" value="<%= locals.user ? user.id : '' %>" />
+
+            <label for="name">Name: </label>
+            <input id="name" name="name" placeholder="What other calls you" <%=(locals.user) ? 'readonly' : '' %>
+                value="<%= locals.user ? user.name : '' %>" required />
+
+            <% if (!locals.user) { %>
+                <!--login or register-->
+                <label for="password">Password: </label>
+                <input id="password" name="password" type="password" placeholder="Your secret"
+                    value="" required />
+            <% } else { %>
+                <!--update-->
+                <label for="password">Old Password: </label>
+                <input id="password" name="password" type="password" placeholder="Old password"
+                    value="" required />
+                <label for="newPassword">New Password: </label>
+                <input id="newPassword" name="newPassword" type="password" placeholder="New password"
+                    value="" required />
+            <% } %>
+
+            <button type="submit" class="btn btn-light">
+                <%= locals.actionType ? actionType : 'Submit' %>
+            </button>
+        </div>
+    </form>
+</section>
+
+
+<%- include("partials/footer.ejs") %>
