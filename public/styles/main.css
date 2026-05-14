@@ -1,0 +1,79 @@
+body {
+    background-image: url('/images/background.png');
+    background-repeat: repeat;
+    /* Tiles the pattern */
+    background-size: 14vw 14vw;
+    /* Controls the size of each tile */
+    background-position: center;
+    /* Aligns the start of the pattern */
+
+    color: white;
+
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 0;
+}
+
+main {
+    /*push the footer to the bottom*/
+    flex: 1;
+}
+
+#review {
+    text-align: center;
+}
+
+.message {
+    margin-top: 40cqh;
+}
+
+#msg-form {
+    display: flex;
+    justify-content: center;
+}
+
+#msg-form>div {
+    display: flex;
+}
+
+#msg-form>div>button {
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-bottom: .5rem;
+}
+
+.btn-xl {
+    padding: 10px 20px;
+    font-size: 25px;
+    border-radius: 10px;
+}
+
+#users form {
+    display: grid;
+    margin-top: 33vh;
+}
+
+#users .form-elements {
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: left;
+    width: clamp(200px, 35vw, 700px);
+    justify-self: center;
+}
+
+#users .btn {
+    width: 10vw;
+    margin-top: 30px;
+    margin-bottom: 50px;
+}
+
+#users label {
+    margin-top: 20px;
+    color: white;
+    font-size: clamp(1rem, 1.2vw, 2rem);
+}
+
+.modal-header {
+    justify-content: space-between;
+}

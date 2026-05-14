@@ -1,0 +1,43 @@
+<%- include("partials/header.ejs") %>
+
+<!-- a carousal holding cards, in each, 
+2 columns, the left one for title, author, notes and rating, and
+the right one for book cover image-->
+<section id="review">
+    <% if (!locals.reviews || reviews.length===0) { %>
+        <div class="message">
+            <h1>
+                No reviews are available at the moment.
+            </h1>
+            <form id="msg-form" method="POST" action="/">
+                <div id="login-msg" hidden>
+                    <button class="btn btn-light btn-xl" type="submit" name="actionType" value="Register">Register</button>
+                    <h1> or </h1>
+                    <button class="btn btn-light btn-xl" type="submit" name="actionType" value="Login">Login</button>
+                    <h1> to add a book review.</h1>
+                </div>
+                <div id="add-review-msg" hidden>
+                    <button class="btn btn-light btn-xl" type="submit" name="actionType" value="addreview">Add</button>
+                    <h1> a book review now.</h1>
+                </div>
+            </form>
+        </div>
+    <% } else { %>
+
+
+    <% } %>
+</section>
+
+<% if (!locals.reviews || reviews.length===0) { %>
+<script>
+    const currentUser = localStorage.getItem("currentUser");
+    let toShow;
+    if (currentUser) {
+        toShow = document.getElementById("add-review-msg");
+    } else {
+        toShow = document.getElementById("login-msg");
+    }
+    toShow.removeAttribute("hidden");
+</script>
+<% } %>
+<%- include("partials/footer.ejs") %>
