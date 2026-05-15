@@ -5,13 +5,13 @@
         action="/<%= locals.actionType ? actionType.toLowerCase() : 'submit' %>">
 
         <div class="form-elements">
-            <input id="id" name="id" hidden="true" value="<%= locals.user ? user.id : '' %>" />
+            <!-- <input id="id" name="id" hidden="true" value="<%#= locals.username ? user.id : '' %>" /> -->
 
             <label for="name">Name: </label>
-            <input id="name" name="name" placeholder="What other calls you" <%=(locals.user) ? 'readonly' : '' %>
-                value="<%= locals.user ? user.name : '' %>" required />
+            <input id="name" name="name" placeholder="What other calls you" <%=(locals.username) ? 'readonly' : '' %>
+                value="<%= locals.username ? username : '' %>" required />
 
-            <% if (!locals.user) { %>
+            <% if (!locals.username) { %>
                 <!--login or register-->
                 <label for="password">Password: </label>
                 <input id="password" name="password" type="password" placeholder="Your secret"
