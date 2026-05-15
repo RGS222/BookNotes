@@ -72,6 +72,7 @@ main {
     margin-top: 20px;
     color: white;
     font-size: clamp(1rem, 1.2vw, 2rem);
+    font-weight: bold;
 }
 
 .modal-header {
