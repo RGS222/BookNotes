@@ -47,13 +47,15 @@ app.post("/", (req, res) => {
     }
 });
 
-app.post("/register", (req, res) => {
-    const id = addUser(db, req.body.name, req.body.password);
+app.post("/register", async (req, res) => {
+    const id = await addUser(db, req.body.name, req.body.password);
     if (id >= 0) {
         res.render("index.ejs", {
-            user: req.body.name
+            username: req.body.name,
+            password: req.body.password
         });
     } else {
+        console.log(id);
         res.render("users.ejs", {
             actionType: "Register",
             message: "The requested username was already in use.  Please try again."
@@ -61,33 +63,35 @@ app.post("/register", (req, res) => {
     }
 });
 
-app.post("/login", (req, res) => {
-    const pw = getUserPassword(db, req.body.name);
+app.post("/login", async (req, res) => {
+    const pw = await getUserPassword(db, req.body.name);
     if (pw) {
         if (pw === req.body.password) {
-            res.render("index.ejs", {
-                user: req.body.name
+            return res.render("index.ejs", {
+                username: req.body.name,
+                password: pw
             });
-            return res.send("Success");
         }
     }
 
     res.render("users.ejs", {
         actionType: "Login",
-        message: "The username and password were not matched.  Please try again."
+        message: "The username and password were not matched.  Please try again.",
+        username: "",
+        password: ""
     });
 });
 
-app.post("/update", (req, res) => {
-    const pw = getUserPassword(db, req.body.name);
+app.post("/update", async (req, res) => {
+    const pw = await getUserPassword(db, req.body.name);
     if (pw) {
         if (pw === req.body.password) {
-            updateUser(db, req.body.name, req.body.newPassword);
-            res.render("index.ejs", {
-                user: req.body.name,
+            await updateUser(db, req.body.name, req.body.newPassword);
+            return res.render("index.ejs", {
+                username: req.body.name,
+                password: pw,
                 message: "The password was successfully updated."
             });
-            return res.send("Success");
         }
     }
 
@@ -96,6 +100,28 @@ app.post("/update", (req, res) => {
         message: "The username and password were not matched.  Please try again."
     });
 });    
+
+app.get("/users/login", (req, res) => {
+    res.render("users.ejs", {
+        actionType: "Login",
+    });    
+});
+
+app.get("/users/register", (req, res) => {
+    res.render("users.ejs", {
+        actionType: "Register",
+    });
+});
+
+app.get("/users/update", (req, res) => {
+    res.render("users.ejs", {
+        actionType: "Update",
+    });
+});
+
+app.get("/users/signout", (req, res) => {
+    res.redirect("/");
+});
 
 app.listen(port, () => {
     console.log(`server is running on port ${port}`);
