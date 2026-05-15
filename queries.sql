@@ -38,6 +38,26 @@ BEGIN
 END;
 $$;
 
+-- GET user ID and password--
+CREATE OR REPLACE PROCEDURE getUserIdPassword(
+    _name VARCHAR,
+    INOUT _id INT DEFAULT NULL,
+    INOUT _password VARCHAR DEFAULT NULL
+)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+	IF _name IS NULL THEN
+        RAISE EXCEPTION 'Parameter name cannot be NULL';
+    END IF;
+	
+    SELECT id, password 
+    INTO _id, _password
+    FROM users 
+    WHERE username = _name;
+END;
+$$;
+
 -- GET user reviews --
 CREATE OR REPLACE FUNCTION getUserReviews(
     name VARCHAR --if null return all reviews

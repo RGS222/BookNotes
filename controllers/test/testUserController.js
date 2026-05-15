@@ -1,5 +1,6 @@
 import {
     getUserPassword,
+    getUserIdPassword,
     addUser,
     updateUser,
     deleteUser,
@@ -34,6 +35,13 @@ async function test() {
             process.exit();
         }
         console.log("added user with id:" + id);
+    }
+
+    //get id and password of user001
+    let data = await getUserIdPassword(db, testUsers[0].username);
+    if (!data || data[0] <= 0 || data[1] !== testUsers[0].password) {
+        console.error("Problem in test on getUserIdPassword");
+        process.exit();
     }
 
     //get password of user001
