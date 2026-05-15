@@ -29,7 +29,19 @@ the right one for book cover image-->
 </section>
 
 <% if (!locals.reviews || reviews.length===0) { %>
-<script>
+    <!--no reviews-->
+    <% if (locals.username && username !== "") { %>
+        <!--user logged in-->
+        <script>
+            document.getElementById("add-review-msg").removeAttribute("hidden");
+        </script>
+    <% } else { %>
+        <!--no user logged in-->
+        <script>
+            document.getElementById("login-msg").removeAttribute("hidden");
+        </script>
+    <% } %>
+<!-- <script>
     const currentUser = localStorage.getItem("currentUser");
     let toShow;
     if (currentUser) {
@@ -38,6 +50,6 @@ the right one for book cover image-->
         toShow = document.getElementById("login-msg");
     }
     toShow.removeAttribute("hidden");
-</script>
+</script> -->
 <% } %>
 <%- include("partials/footer.ejs") %>
