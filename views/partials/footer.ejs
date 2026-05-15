@@ -8,9 +8,25 @@
 </body>
 
 <% if (locals.message) { %>
+    <!--show message dialog at page load-->
     <script>
+        document.addEventListener('hide.bs.modal', function (event) {
+            // Remove the focus from the active element
+            console.log("hide.bs.modal")
+            if (document.activeElement) {
+                document.activeElement.blur();
+            }
+        });
         const myModal = new bootstrap.Modal(document.getElementById('exampleModalCenter'));
         myModal.show();
+    </script>
+<% } %>
+
+<% if (locals.username && locals.password) { %>
+    <!--store username and password after validation-->
+    <script>
+        localStorage.setItem("username", "<%= username %>");
+        localStorage.setItem("password", "<%= password %>");
     </script>
 <% } %>
 </html>
