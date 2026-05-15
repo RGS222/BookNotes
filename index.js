@@ -1,6 +1,7 @@
 import express from "express";
 import pg from "pg";
 import { addUser, updateUser, getUserPassword } from "./controllers/userController.js";
+import { addReview } from "./controllers/reviewController.js";
 
 const app = express();
 const port = 3000;
@@ -37,8 +38,10 @@ app.post("/", (req, res) => {
             break;
 
         case "addreview":
-            res.render("review.ejs", {
-                add: "true",
+            res.render("reviews.ejs", {
+                actionType: "Add",
+                username: req.body.username,
+                password: req.body.password
             });
             break;
 
@@ -47,11 +50,12 @@ app.post("/", (req, res) => {
     }
 });
 
+/* users routes */
 app.post("/register", async (req, res) => {
-    const id = await addUser(db, req.body.name, req.body.password);
+    const id = await addUser(db, req.body.username, req.body.password);
     if (id >= 0) {
         res.render("index.ejs", {
-            username: req.body.name,
+            username: req.body.username,
             password: req.body.password
         });
     } else {
@@ -64,11 +68,11 @@ app.post("/register", async (req, res) => {
 });
 
 app.post("/login", async (req, res) => {
-    const pw = await getUserPassword(db, req.body.name);
+    const pw = await getUserPassword(db, req.body.username);
     if (pw) {
         if (pw === req.body.password) {
             return res.render("index.ejs", {
-                username: req.body.name,
+                username: req.body.username,
                 password: pw
             });
         }
@@ -83,12 +87,12 @@ app.post("/login", async (req, res) => {
 });
 
 app.post("/update", async (req, res) => {
-    const pw = await getUserPassword(db, req.body.name);
+    const pw = await getUserPassword(db, req.body.username);
     if (pw) {
         if (pw === req.body.password) {
-            await updateUser(db, req.body.name, req.body.newPassword);
+            await updateUser(db, req.body.username, req.body.newPassword);
             return res.render("index.ejs", {
-                username: req.body.name,
+                username: req.body.username,
                 password: pw,
                 message: "The password was successfully updated."
             });
@@ -121,6 +125,34 @@ app.get("/users/update", (req, res) => {
 
 app.get("/users/signout", (req, res) => {
     res.redirect("/");
+});
+
+/* reviews routes */
+app.post("/reviews/add", async (req, res) => {
+    const data = await getUserIdPassword(db, req.body.username);
+    if (data) {
+        if (data[1] === req.body.password) {
+            const review = {
+                userId: data[0],
+                title: req.body.title,
+                author: req.body.author,
+                notes: req.body.notes,
+                rating: req.body.rating,
+                lastUpdateDate: new Date()
+            }
+            const id = await addReview(db, review);
+            if (id) {
+                reviews = [review, ...reviews];
+                return res.render("index.ejs", {
+                    message: "Your review has been successfully added."
+                });
+            }
+        }
+    }
+
+    res.render("index.ejs", {
+        message: "Problem encountered in adding the review.\n  Please try again later."
+    });
 });
 
 app.listen(port, () => {

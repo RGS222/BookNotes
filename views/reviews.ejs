@@ -1,0 +1,66 @@
+<%- include("partials/header.ejs") %>
+
+    <section id="reviews">
+        <form class="form" autocomplete="off" method="POST"
+            action="/reviews/<%= locals.actionType ? actionType.toLowerCase() : 'submit' %>">
+
+            <div class="form-elements">
+                <input id="username" name="username" hidden="true" value="<%= locals.username ? username : '' %>" />
+                <input id="password" name="password" hidden="true" value="<%= locals.password ? password : '' %>" />
+
+                <label for="title">Title: </label>
+                <input id="title" name="title" placeholder="What have you read" <%=(locals.title) ? 'readonly' : '' %>
+                    value="<%= locals.title ? title : '' %>" required />
+                <label for="author">Author: </label>
+                <input id="author" name="author" placeholder="Who wrote the book" <%=(locals.author) ? 'readonly' : '' %>
+                    value="<%= locals.author ? author : '' %>" required />
+                <label for="notes">Review: </label>
+                <textarea id="notes" name="notes" placeholder="What do you want to say about the book" rows="8"></textarea>
+                <label for="rating">Rating: (1-5)</label>
+                <!-- <input id="rating" name="rating" placeholder="How good is the book" type="number" min="1" max="5"
+                    value="<%#= locals.rating ? rating : '' %>" /> -->
+                <div class="rating-card">
+                    <!-- <h5 class="mb-4">Interactive Star Rating</h5> -->
+                    <div class="star-rating animated-stars">
+                        <input type="radio" id="star5" name="rating" value="5">
+                        <label for="star5" class="bi bi-star-fill"></label>
+                        <input type="radio" id="star4" name="rating" value="4">
+                        <label for="star4" class="bi bi-star-fill"></label>
+                        <input type="radio" id="star3" name="rating" value="3">
+                        <label for="star3" class="bi bi-star-fill"></label>
+                        <input type="radio" id="star2" name="rating" value="2">
+                        <label for="star2" class="bi bi-star-fill"></label>
+                        <input type="radio" id="star1" name="rating" value="1">
+                        <label for="star1" class="bi bi-star-fill"></label>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-light btn-xl">
+                    <% if (locals.actionType) { %>
+                        <%= actionType %>
+                    <% } else { %>
+                        Submit
+                    <% } %>
+                </button>
+            </div>
+        </form>
+    </section>
+
+
+    <%- include("partials/footer.ejs") %>
+
+<% if (locals.notes) { %>
+    <script>
+        document.getElementById("notes").value = "<%= notes %>";
+    </script>
+<% } %>
+
+<script>
+    document.querySelectorAll('.star-rating:not(.readonly) label').forEach(star => {
+        star.addEventListener('click', function () {
+            this.style.transform = 'scale(1.2)';
+            setTimeout(() => {
+                this.style.transform = 'scale(1)';
+            }, 200);
+        });
+    });
+</script>
