@@ -7,8 +7,8 @@
         <div class="form-elements">
             <!-- <input id="id" name="id" hidden="true" value="<%#= locals.username ? user.id : '' %>" /> -->
 
-            <label for="name">Name: </label>
-            <input id="name" name="name" placeholder="What other calls you" <%=(locals.username) ? 'readonly' : '' %>
+            <label for="username">Username: </label>
+            <input id="username" name="username" placeholder="Select something you can remember" <%=(locals.username) ? 'readonly' : '' %>
                 value="<%= locals.username ? username : '' %>" required />
 
             <% if (!locals.username) { %>
@@ -26,7 +26,7 @@
                     value="" required />
             <% } %>
 
-            <button type="submit" class="btn btn-light">
+            <button type="submit" class="btn btn-light btn-xl" btn-xl>
                 <%= locals.actionType ? actionType : 'Submit' %>
             </button>
         </div>

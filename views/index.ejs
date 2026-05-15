@@ -10,6 +10,8 @@ the right one for book cover image-->
                 No reviews are available at the moment.
             </h1>
             <form id="msg-form" method="POST" action="/">
+                <input id="username" name="username" hidden="true" value="<%= locals.username ? username : '' %>" />
+                <input id="password" name="password" hidden="true" value="<%= locals.password ? password : '' %>" />
                 <div id="login-msg" hidden>
                     <button class="btn btn-light btn-xl" type="submit" name="actionType" value="Register">Register</button>
                     <h1> or </h1>
@@ -41,15 +43,5 @@ the right one for book cover image-->
             document.getElementById("login-msg").removeAttribute("hidden");
         </script>
     <% } %>
-<!-- <script>
-    const currentUser = localStorage.getItem("currentUser");
-    let toShow;
-    if (currentUser) {
-        toShow = document.getElementById("add-review-msg");
-    } else {
-        toShow = document.getElementById("login-msg");
-    }
-    toShow.removeAttribute("hidden");
-</script> -->
 <% } %>
 <%- include("partials/footer.ejs") %>

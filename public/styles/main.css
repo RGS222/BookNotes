@@ -49,12 +49,17 @@ main {
     border-radius: 10px;
 }
 
-#users form {
+#users .form {
     display: grid;
     margin-top: 33vh;
 }
 
-#users .form-elements {
+#reviews .form {
+    display: grid;
+    margin-top: 10vh;
+}
+
+.form-elements {
     display: flex;
     flex-flow: column nowrap;
     align-items: left;
@@ -62,19 +67,27 @@ main {
     justify-self: center;
 }
 
-#users .btn {
+/* #notes {
+    min-height: 400px;
+} */
+
+.form .btn {
     width: 10vw;
     margin-top: 30px;
     margin-bottom: 50px;
 }
 
-#users label {
+.form label {
     margin-top: 20px;
     color: white;
     font-size: clamp(1rem, 1.2vw, 2rem);
     font-weight: bold;
 }
 
+.form input,
+.form textarea {
+    font-size: 1.2rem;
+}
 .modal-header {
     justify-content: space-between;
 }
