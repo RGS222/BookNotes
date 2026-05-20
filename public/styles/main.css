@@ -88,6 +88,42 @@ main {
 .form textarea {
     font-size: 1.2rem;
 }
+
 .modal-header {
     justify-content: space-between;
+}
+
+#review-control {
+    display: flex;
+}
+
+#review-display {
+    display: flex;
+    justify-content: center;
+    margin-top: 15vh;
+    margin-bottom: 25px;
+}
+
+.card {
+    width: 60vw;
+}
+
+.card-body {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.card-main-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.card-text {
+    margin: 10px;
+    flex: 1;
+    border: 1px black solid;
+    text-align: left;
+    padding: 5px;
 }
