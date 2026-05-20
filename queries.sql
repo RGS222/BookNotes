@@ -58,6 +58,26 @@ BEGIN
 END;
 $$;
 
+-- GET review owner --
+CREATE OR REPLACE PROCEDURE getReviewOwner(
+    _reviewId INT,
+    INOUT _username INT DEFAULT NULL
+)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+	IF _reviewId IS NULL THEN
+        RAISE EXCEPTION 'Parameter _reviewId cannot be NULL';
+    END IF;
+	
+    SELECT u.username 
+    INTO _username
+    FROM reviews r 
+    INNER JOIN users u ON u.id = r.userId
+    WHERE r.reviewId = _reviewId;
+END;
+$$;
+
 -- GET user reviews --
 CREATE OR REPLACE FUNCTION getUserReviews(
     name VARCHAR --if null return all reviews
@@ -69,7 +89,7 @@ BEGIN
     RETURN QUERY
     SELECT r.* FROM reviews r 
     INNER JOIN users u ON u.id = r.userId
-    WHERE user IS NULL OR u.username = name;
+    WHERE name IS NULL OR u.username = name;
 END;
 $$;
 

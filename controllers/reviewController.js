@@ -9,7 +9,7 @@ export async function getUserReviews(db, name) {
                 .flatMap((x) => Object.values(x))
                 .forEach((row) => {
                     row = row.slice(1, -1);
-                    console.log(row);
+                    // console.log(row);
                     const items = row.split(",");
                     toReturn.push({
                         id: parseInt(items[0]),
@@ -42,7 +42,7 @@ export async function addReview(db, review) {
     ];
 
     try {
-        console.log("review.userId=" + review.userId);
+        // console.log("review.userId=" + review.userId);
         const res = await db.query(query, values);
         // The OUT parameter values are returned in the first row
         return res.rows[0].returnid;
@@ -79,6 +79,66 @@ export async function deleteReview(db, reviewId) {
         return true;
     } catch (err) {
         console.error("Error executing procedure deleteReview:", err);
+        return false;
+    }
+}
+
+function removeDoubleQuotesAround(text) {
+    if (!text) {
+      return text;
+    }
+
+    let start = 0;
+    let end = text.length;
+    if (text[0] === '"') {
+        start = 1;
+    }
+    if (text.at(-1) === '"') {
+        end = -1;
+    }
+    return text.slice(start, end);
+}
+
+export async function getAllReviews(db) {
+    const query = "SELECT getUserReviews(NULL)";
+    let toReturn = [];
+    try {
+        const res = await db.query(query);
+        if (res.rows) {
+            // console.log(res.rows);
+            res.rows
+                .flatMap((x) => Object.values(x))
+                .forEach((row) => {
+                    row = row.slice(1, -1);
+                    // console.log(row);
+                    const items = row.split(",");
+                    toReturn.push({
+                        id: parseInt(items[0]),
+                        userId: parseInt(items[1]),
+                        title: removeDoubleQuotesAround(items[2]),
+                        author: removeDoubleQuotesAround(items[3]),
+                        notes: removeDoubleQuotesAround(items[4]),
+                        rating: parseInt(items[5]),
+                        lastUpdateDate: new Date(items[6]),
+                    });
+                });
+        }
+        return toReturn;
+    } catch (err) {
+        console.error("Error executing function getAllReviews:", err);
+        return null;
+    }
+}
+
+export async function getReviewOwner(db, reviewId) {
+    const query = "CALL updateReview($1)";
+    const values = [reviewId];
+
+    try {
+        const res = await db.query(query, values);
+        return true;
+    } catch (err) {
+        console.error("Error executing procedure getReviewOwner:", err);
         return false;
     }
 }
