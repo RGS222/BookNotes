@@ -1,8 +1,5 @@
 <%- include("partials/header.ejs") %>
 
-<!-- a carousal holding cards, in each, 
-2 columns, the left one for title, author, notes and rating, and
-the right one for book cover image-->
 <section id="review">
     <% if (!locals.reviews || reviews.length===0) { %>
         <div class="message">
@@ -25,8 +22,68 @@ the right one for book cover image-->
             </form>
         </div>
     <% } else { %>
+        <!-- a carousal holding cards, in each, 
+        2 columns, the left one for title, author, notes and rating, and
+        the right one for book cover image-->
+        <div id="review-display">
+            <div id="carouselExample" class="carousel slide">
+                <div class="carousel-inner">
+                    <% let first = true %>
+                    <%# console.log(reviews.length); %>
+                    <% for (let i = 0; i < reviews.length; i++) { %>
+                        <div class="carousel-item <%= (first) ? 'active' : ''%>">
+                            <div class="card mb-3">
+                                <div class="row g-0">
+                                    <div class="col-md-4">
+                                        <% if (reviews[i].coverUrl) { %>
+                                            <img src="<%= reviews[i].coverUrl %>" class="img-fluid rounded-start" alt="book cover image">
+                                        <% } else { %>
+                                            <h2>No Book Cover Image Available</h2>
+                                        <% } %>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <div class="card-body">
+                                            <div class="card-main-body">
+                                                <div>
+                                                    <h4 class="card-title"><%= reviews[i].title %></h5>
+                                                    <h5 class="card-subtitle">by <%= reviews[i].author %></h6>
+                                                </div>
+                                                <div class="card-text">
+                                                    <p><%= reviews[i].notes %></p>
+                                                </div>
+                                            </div>
+                                            <div class="card-body-footer">
+                                                <p class="card-small-text"><small class="text-body-secondary"><%= reviews[i].lastUpdateDate %></small></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <% first = false %>
+                    <% } %>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+        </div>
 
-
+        <form id="msg-form" method="POST" action="/reviews">
+            <input id="username" name="username" hidden="true" value="<%= locals.username ? username : '' %>" />
+            <input id="password" name="password" hidden="true" value="<%= locals.password ? password : '' %>" />
+            <div id="review-control">
+                <button class="btn btn-light btn-xl" type="submit" name="actionType" value="Update"
+                    <%= (typeof locals.isOwned !== "undefined" && isOwned) ? "" : "disabled" %> >Update</button>
+                <button class="btn btn-light btn-xl" type="submit" name="actionType" value="Delete"
+                    <%= (typeof locals.isOwned !== "undefined" && isOwned) ? "" : "disabled" %> >Delete</button>
+            </div>
+        </form>
     <% } %>
 </section>
 
